@@ -24,10 +24,14 @@ jobs:
       - name: Install Dependencies
         run: pip install requests
 
-      - name: Run EPG Script
+      - name: Extract and Run Script
         env:
+          ZIP_PASS: ${{ secrets.ZIP_PASS }}
           EPG_API_URL: ${{ secrets.EPG_API_URL }}
-        run: python main.py
+        run: |
+          7z e main.zip -p"$ZIP_PASS" -y
+          python main.py
+          rm -f main.py
 
       - name: Commit and Push Changes
         run: |
